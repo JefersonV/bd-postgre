@@ -2,7 +2,7 @@
 
 --Tablas que no tienen ninguna relacion
 --Tabla cliente
-CREATE TABLE cliente (
+CREATE TABLE IF NOT EXISTS cliente (
 	id_cliente SERIAL PRIMARY KEY,
 	nombre VARCHAR(45),
 	telefono INT, 
@@ -13,19 +13,24 @@ CREATE TABLE cliente (
 );
 
 --Tabla tipo comprobante
-CREATE TABLE tipo_comprobante(
+CREATE TABLE IF NOT EXISTS tipo_comprobante(
 	id_tipo_comprobante SERIAL PRIMARY KEY,
 	nombre VARCHAR(45)
 );
 
 --Tabla modo pago
-CREATE TABLE modo_pago(
+CREATE TABLE IF NOT EXISTS modo_pago(
 	id_modo_pago SERIAL PRIMARY KEY,
+	nombre VARCHAR(45)
+);
+--Tabla tipo de servicio
+CREATE TABLE IF NOT EXISTS tipo_servicio(
+	id_tipo_servicio SERIAL PRIMARY KEY,
 	nombre VARCHAR(45)
 );
 
 --Tabla proveedor
-CREATE TABLE proveedor(
+CREATE TABLE IF NOT EXISTS proveedor(
 	id_proveedor SERIAL PRIMARY KEY,
 	nombre VARCHAR(45),
 	telefono INT,
@@ -33,15 +38,41 @@ CREATE TABLE proveedor(
 	correo VARCHAR(45)
 );
 
+--Tabla rol
+CREATE TABLE IF NOT EXISTS rol(
+	id_rol SERIAL PRIMARY KEY, 
+	nombre VARCHAR(45)
+);
+
+--Tabla usuario
+CREATE TABLE IF NOT EXISTS usuario(
+	id_usuario SERIAL PRIMARY KEY,
+	nombre VARCHAR(45),
+	apellido VARCHAR(45),
+	tipo_usuario VARCHAR(45),
+	email VARCHAR(45),
+	puesto VARCHAR(45),
+	telefono INT,
+	usuario_password VARCHAR(40),
+	id_rol INT,
+	FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
+);
+--Tabla tipo de materia prima
+CREATE TABLE IF NOT EXISTS tipo_materia_prima(
+	id_tipo_materia SERIAL PRIMARY KEY,
+	nombre VARCHAR(45)
+);
+
+
 --Tabla factura
-CREATE TABLE factura(
+CREATE TABLE IF NOT EXISTS factura(
 	id_factura SERIAL PRIMARY KEY,
 	observaciones TEXT,
 	fecha DATE
 );
 
 --Tabla unidad de medida
-CREATE TABLE unidad_de_medida(
+CREATE TABLE IF NOT EXISTS unidad_de_medida(
 	id_unidad_medida SERIAL PRIMARY KEY,
 	nombre VARCHAR(45)
 );
@@ -53,25 +84,33 @@ CREATE TABLE tipo_empaque(
 );
 
 --Tabla tipo producto
-CREATE TABLE tipo_producto(
+CREATE TABLE IF NOT EXISTS tipo_producto(
 	id_tipo_producto SERIAL PRIMARY KEY,
 	nombre VARCHAR(45)
 );
 
---Tabla rol
-CREATE TABLE rol(
-	id_rol SERIAL PRIMARY KEY, 
-	nombre VARCHAR(45)
+
+--Tabla servicio café
+CREATE TABLE IF NOT EXISTS servicio_cafe(
+	id_servicio_cafe SERIAL PRIMARY KEY,
+	fecha DATE,
+	costo_servicio DOUBLE PRECISION,
+	id_tipo_materia INT,
+	id_tipo_servicio INT,
+	id_unidad_medida INT,
+	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
+	FOREIGN KEY (id_tipo_servicio) REFERENCES tipo_servicio(id_tipo_servicio),
+	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida)
 );
 
 --Tabla modulo
-CREATE TABLE modulo(
+CREATE TABLE IF NOT EXISTS modulo(
 	id_modulo SERIAL PRIMARY KEY,
 	nombre VARCHAR(45)
 );
 
 --Tabla transportista
-CREATE TABLE transportista(
+CREATE TABLE IF NOT EXISTS transportista(
 	id_transportista SERIAL PRIMARY KEY,
 	nombre VARCHAR(45),
 	telefono INT,
@@ -81,21 +120,26 @@ CREATE TABLE transportista(
 	tarifa DOUBLE PRECISION
 );
 
---Tabla tipo de servicio
-CREATE TABLE tipo_servicio(
-	id_tipo_servicio SERIAL PRIMARY KEY,
-	nombre VARCHAR(45)
-);
-
---Tabla tipo de materia prima
-CREATE TABLE tipo_materia_prima(
-	id_tipo_materia SERIAL PRIMARY KEY,
-	nombre VARCHAR(45)
-);
-
 --Tablas con relaciones con las tablas anteriores
+--Tabla costo de produccion
+CREATE TABLE IF NOT EXISTS costo_produccion(
+	id_costo_produccion SERIAL PRIMARY KEY,
+	cantidad INT,
+	precio_venta DOUBLE PRECISION,
+	costo_por_libra DOUBLE PRECISION,
+	ganancia_neta DOUBLE PRECISION,
+	id_empaque INT,
+	id_tipo_materia INT,
+	id_unidad_medida INT,
+	id_servicio_cafe INT,
+	FOREIGN KEY (id_empaque) REFERENCES tipo_empaque(id_empaque),
+	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
+	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida),
+	FOREIGN KEY (id_servicio_cafe) REFERENCES servicio_cafe(id_servicio_cafe)
+);
+
 --Tabla de Producto
-CREATE TABLE producto(
+CREATE TABLE IF NOT EXISTS producto(
     id_producto SERIAL PRIMARY KEY,
     nombre VARCHAR(45),
     stock_ingreso INT, 
@@ -111,7 +155,7 @@ CREATE TABLE producto(
 );
 
 --Tabla de Compra
-CREATE TABLE compras(
+CREATE TABLE IF NOT EXISTS compras(
     id_compra SERIAL PRIMARY KEY,
     fecha DATE,
     cantidad INT,
@@ -133,7 +177,8 @@ CREATE TABLE compras(
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
-CREATE TABLE venta(
+--Tabla venta 
+CREATE TABLE IF NOT EXISTS venta(
     id_venta SERIAL PRIMARY KEY,
     fecha DATE,
     cantidad INT, 
@@ -141,12 +186,12 @@ CREATE TABLE venta(
     descuento DOUBLE PRECISION,
     subtotal DOUBLE PRECISION,
     total DOUBLE PRECISION,
-    no_factura INT,
+    id_factura INT,
     id_cliente INT,
     id_producto INT,
     id_modo_pago INT,
     id_usuario INT,
-    FOREIGN KEY (no_factura) REFERENCES factura(no_factura),
+    FOREIGN KEY (id_factura) REFERENCES factura(id_factura),
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
     FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
     FOREIGN KEY (id_modo_pago) REFERENCES modo_pago(id_modo_pago),
@@ -154,7 +199,7 @@ CREATE TABLE venta(
 );
 
 --Tabla pedido cliente
-CREATE TABLE pedido_cliente(
+CREATE TABLE IF NOT EXISTS pedido_cliente(
     id_pedido_cliente SERIAL PRIMARY KEY,
     fecha DATE,
     cantidad_producto VARCHAR(45),
@@ -169,7 +214,7 @@ CREATE TABLE pedido_cliente(
 );
 
 --Inventario_movimientos
-CREATE TABLE inventario_movimiento(
+CREATE TABLE IF NOT EXISTS inventario_movimiento(
 	id_inventario_movimiento SERIAL PRIMARY KEY,
     fecha TIMESTAMP,
     tipo_operacion VARCHAR(45),
@@ -182,14 +227,14 @@ CREATE TABLE inventario_movimiento(
 );
 
 --Tabla operacion
-CREATE TABLE operacion(
+CREATE TABLE IF NOT EXISTS operacion(
 	id_operacion SERIAL PRIMARY KEY,
 	id_modulo INT,
 	FOREIGN KEY (id_modulo) REFERENCES modulo(id_modulo)
 );
 
 --Tabla rol operacion
-CREATE TABLE rol_operacion(
+CREATE TABLE IF NOT EXISTS rol_operacion(
 	id_rol_operacion SERIAL PRIMARY KEY,
 	id_rol INT,
 	id_operacion INT,
@@ -197,35 +242,8 @@ CREATE TABLE rol_operacion(
 	FOREIGN KEY (id_operacion) REFERENCES operacion(id_operacion)
 );
 
---Tabla usuario
-CREATE TABLE usuario(
-	id_usuario SERIAL PRIMARY KEY,
-	nombre VARCHAR(45),
-	apellido VARCHAR(45),
-	tipo_usuario VARCHAR(45),
-	email VARCHAR(45),
-	puesto VARCHAR(45),
-	telefono INT,
-	usuario_password VARCHAR(40),
-	id_rol INT,
-	FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
-);
-
---Tabla servicio café
-CREATE TABLE servicio_cafe(
-	id_servicio_cafe SERIAL PRIMARY KEY,
-	fecha DATE,
-	costo_servicio DOUBLE PRECISION,
-	id_tipo_materia INT,
-	id_tipo_servicio INT,
-	id_unidad_medida INT,
-	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
-	FOREIGN KEY (id_tipo_servicio) REFERENCES tipo_servicio(id_tipo_servicio),
-	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida)
-);
-
 --Devolución proveedor
-CREATE TABLE devolucion_proveedor(
+CREATE TABLE IF NOT EXISTS devolucion_proveedor(
     id_devolucion_proveedor SERIAL PRIMARY KEY,
     fecha DATE,
     detalle_devolucion VARCHAR(45),
@@ -238,7 +256,7 @@ CREATE TABLE devolucion_proveedor(
 );
 
 --Devolucion cliente
-CREATE TABLE devolucion_cliente(
+CREATE TABLE IF NOT EXISTS devolucion_cliente(
     id_dev_cliente SERIAL PRIMARY KEY,
     fecha DATE,
     detalle_devolucion VARCHAR(45),
@@ -255,7 +273,7 @@ CREATE TABLE devolucion_cliente(
 );
 
 --Materia Prima
-CREATE TABLE materia_prima(
+CREATE TABLE IF NOT EXISTS materia_prima(
     id_materia_prima SERIAL PRIMARY KEY,
     cantidad DOUBLE PRECISION,
     costo DOUBLE PRECISION,
@@ -267,27 +285,10 @@ CREATE TABLE materia_prima(
 );
 
 --Tabla Material de Empaque
-CREATE TABLE material_empaque(
+CREATE TABLE IF NOT EXISTS material_empaque(
     id_empaque SERIAL PRIMARY KEY,
     fecha DATE,
     costo DOUBLE PRECISION,
     id_tipo_empaque INT,
-    FOREIGN KEY (id_tipo_empaque) REFERENCES tipo_empaque(id_tipo_empaque)
-);
-
---Tabla costo producción
-CREATE TABLE costo_produccion(
-	id_costo_produccion SERIAL PRIMARY KEY,
-	cantidad INT,
-	precio_venta DOUBLE PRECISION,
-	costo_por_libra DOUBLE PRECISION,
-	ganancia_neta DOUBLE PRECISION,
-	id_empaque INT,
-	id_tipo_materia INT,
-	id_unidad_medida INT,
-	id_servicio_cafe INT,
-	FOREIGN KEY (id_empaque) REFERENCES tipo_empaque(id_empaque),
-	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
-	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida),
-	FOREIGN KEY (id_servicio_cafe) REFERENCES servicio_cafe(id_servicio_cafe)
+    FOREIGN KEY (id_tipo_empaque) REFERENCES tipo_empaque(id_empaque)
 );
