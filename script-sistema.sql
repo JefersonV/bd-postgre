@@ -155,7 +155,7 @@ CREATE TABLE venta(
 
 --Tabla pedido cliente
 CREATE TABLE pedido_cliente(
-    id_pedido_cliente INT,
+    id_pedido_cliente SERIAL PRIMARY KEY,
     fecha DATE,
     cantidad_producto VARCHAR(45),
     descuento DOUBLE PRECISION,
