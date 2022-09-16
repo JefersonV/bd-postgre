@@ -226,6 +226,7 @@ CREATE TABLE servicio_cafe(
 
 --Devolución proveedor
 CREATE TABLE devolucion_proveedor(
+    id_devolucion_proveedor SERIAL PRIMARY KEY,
     fecha DATE,
     detalle_devolucion VARCHAR(45),
     sub_total DOUBLE PRECISION,
@@ -238,7 +239,7 @@ CREATE TABLE devolucion_proveedor(
 
 --Devolucion cliente
 CREATE TABLE devolucion_cliente(
-    id_dev_cliente INT,
+    id_dev_cliente SERIAL PRIMARY KEY,
     fecha DATE,
     detalle_devolucion VARCHAR(45),
     sub_total DOUBLE PRECISION,
