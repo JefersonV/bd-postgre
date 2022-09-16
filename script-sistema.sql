@@ -170,20 +170,15 @@ CREATE TABLE pedido_cliente(
 
 --Inventario_movimientos
 CREATE TABLE inventario_movimiento(
-    fecha DATE, --Tengo dudas en esta, por que en el diagrama es Date time y es primary key
+	id_inventario_movimiento SERIAL PRIMARY KEY,
+    fecha TIMESTAMP,
     tipo_operacion VARCHAR(45),
     decuento DOUBLE PRECISION,
     total_operacion DOUBLE PRECISION,
-    id_usuario INT,
-    id_cliente INT, 
-    id_proveedor INT,
-    id_producto INT,
-    id_modo_pago INT,
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
-    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
-    FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor),
-    FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
-    FOREIGN KEY (id_modo_pago) REFERENCES modo_pago(id_modo_pago)
+    id_venta INT,
+    id_compra INT, 
+    FOREIGN KEY (id_venta) REFERENCES venta(id_venta),
+    FOREIGN KEY (id_compra) REFERENCES compras(id_compra)
 );
 
 --Tabla operacion
