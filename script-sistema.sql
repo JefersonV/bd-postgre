@@ -192,7 +192,7 @@ CREATE TABLE operacion(
 CREATE TABLE rol_operacion(
 	id_rol_operacion SERIAL PRIMARY KEY,
 	id_rol INT,
-	id_operacion INT.
+	id_operacion INT,
 	FOREIGN KEY (id_rol) REFERENCES rol(id_rol),
 	FOREIGN KEY (id_operacion) REFERENCES operacion(id_operacion)
 );
