@@ -287,7 +287,7 @@ CREATE TABLE costo_produccion(
 	id_unidad_medida INT,
 	id_servicio_cafe INT,
 	FOREIGN KEY (id_empaque) REFERENCES tipo_empaque(id_empaque),
-	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia)
-	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida)
+	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
+	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida),
 	FOREIGN KEY (id_servicio_cafe) REFERENCES servicio_cafe(id_servicio_cafe)
 );
