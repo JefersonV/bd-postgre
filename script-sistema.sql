@@ -274,3 +274,20 @@ CREATE TABLE material_empaque(
     id_tipo_empaque INT,
     FOREIGN KEY (id_tipo_empaque) REFERENCES tipo_empaque(id_tipo_empaque)
 );
+
+--Tabla costo producción
+CREATE TABLE costo_produccion(
+	id_costo_produccion SERIAL PRIMARY KEY,
+	cantidad INT,
+	precio_venta DOUBLE PRECISION,
+	costo_por_libra DOUBLE PRECISION,
+	ganancia_neta DOUBLE PRECISION,
+	id_empaque INT,
+	id_tipo_materia INT,
+	id_unidad_medida INT,
+	id_servicio_cafe INT,
+	FOREIGN KEY (id_empaque) REFERENCES tipo_empaque(id_empaque),
+	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia)
+	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida)
+	FOREIGN KEY (id_servicio_cafe) REFERENCES servicio_cafe(id_servicio_cafe)
+);
