@@ -198,7 +198,7 @@ CREATE TABLE rol_operacion(
 	id_rol_operacion SERIAL PRIMARY KEY,
 	id_rol INT,
 	id_operacion INT.
-	FOREIGN KEY (id_rol) REFERENCES rol(id-rol),
+	FOREIGN KEY (id_rol) REFERENCES rol(id_rol),
 	FOREIGN KEY (id_operacion) REFERENCES operacion(id_operacion)
 );
 
@@ -225,7 +225,7 @@ CREATE TABLE servicio_cafe(
 	id_tipo_servicio INT,
 	id_unidad_medida INT,
 	FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
-	FOREIGN KEY (id_tipo_servicio) REFERENCES tipo_servicio(id_tipo_servicio)
+	FOREIGN KEY (id_tipo_servicio) REFERENCES tipo_servicio(id_tipo_servicio),
 	FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida)
 );
 
