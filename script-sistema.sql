@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS usuario(
 	email VARCHAR(45),
 	puesto VARCHAR(45),
 	telefono INT,
-	usuario_password VARCHAR(40),
+	usuario_password VARCHAR(255),
 	id_rol INT,
 	FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
 );
