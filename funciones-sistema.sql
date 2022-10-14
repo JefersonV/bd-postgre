@@ -161,3 +161,36 @@ LANGUAGE 'plpgsql';
 
 --updateSale(id_v, cantidad, descrpcion, descuento, id_factura. id_cliente, id_producto, id_modo_pago, id_usuario)
 SELECT updateSale(10, 2, 'CAFE Prueba', 10, 1, 1, 2, 2, 2);
+
+--Funcion para llenar la tabla inventario_movimiento
+CREATE FUNCTION sp_tr_inser_venta_insert_log_mov_inventario() RETURNS TRIGGER
+AS
+$$
+BEGIN
+INSERT INTO inventario_movimiento(fecha, tipo_operacion, descuento, total_operacion, id_venta) 
+VALUES (new.fecha, 'Venta', new.descuento, new.total, new.id_venta);
+RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+--Trigger que se dispara despues del insert en la tabla venta
+CREATE TRIGGER tr_insert_log_mov_inventario AFTER INSERT ON venta
+FOR EACH ROW
+EXECUTE PROCEDURE sp_tr_inser_venta_insert_log_mov_inventario();
+
+
+-- Funcion para dejar contancia en movimiento inventario de la compra
+CREATE FUNCTION sp_tr_inser_compra_insert_log_mov_inventario() RETURNS TRIGGER
+AS
+$$
+BEGIN
+INSERT INTO inventario_movimiento(fecha, tipo_operacion, descuento, total_operacion, id_compra) 
+VALUES (new.fecha, 'Compra', new.descuento, new.total, new.id_compra);
+RETURN NEW;
+END
+$$
+LANGUAGE plpgsql;
+--Trigger que se dispara despues del insert enn la tabla compras
+CREATE TRIGGER tr2_insert_log_mov_inventario AFTER INSERT ON compras
+FOR EACH ROW
+EXECUTE PROCEDURE sp_tr_inser_compra_insert_log_mov_inventario();
