@@ -194,3 +194,57 @@ LANGUAGE plpgsql;
 CREATE TRIGGER tr2_insert_log_mov_inventario AFTER INSERT ON compras
 FOR EACH ROW
 EXECUTE PROCEDURE sp_tr_inser_compra_insert_log_mov_inventario();
+
+
+--Funcion para insertar producto
+CREATE OR REPLACE FUNCTION insertProduct(
+	nombre CHARACTER VARYING,
+    stock_ingreso INTEGER,
+	unidad_medida INTEGER,
+	tipo_producto INTEGER,
+	precio_vent DOUBLE PRECISION,
+	stock_minimo INTEGER
+) RETURNS VOID AS
+$$
+DECLARE
+	id_cost_producc INTEGER;
+    
+BEGIN
+	id_cost_producc = (select id_costo_produccion FROM costo_produccion WHERE id_costo_produccion = ( SELECT MAX(id_costo_produccion) FROM costo_produccion ));
+	INSERT INTO producto(nombre, stock_ingreso, id_unidad_medida, tipo_producto, stock_actual, precio_venta, stock_minimo, id_costo_produccion)
+	VALUES($1, $2, $3, $4, $2, $5, $6, id_cost_producc);
+	
+END;
+$$
+LANGUAGE 'plpgsql';
+--Ejemplo de uso
+select insertproduct('Func prueba Cafe 2', 10, 1, 1, 12, 10);
+
+--Funcion para actualizar producto
+CREATE OR REPLACE FUNCTION updateProduct(
+	id_product INTEGER,
+	nombre CHARACTER VARYING,
+    stock_ingreso INTEGER,
+	unidad_medida INTEGER,
+	tipo_producto INTEGER,
+	precio_vent DOUBLE PRECISION,
+	stock_minimo INTEGER
+) RETURNS VOID AS
+$$
+DECLARE
+	id_cost_producc INTEGER;
+	stock_act INTEGER;
+    stock_aux INTEGER;
+BEGIN
+	stock_act = (SELECT stock_actual FROM producto WHERE id_producto = $1);
+	id_cost_producc = (select id_costo_produccion FROM costo_produccion WHERE id_costo_produccion = ( SELECT MAX(id_costo_produccion) FROM costo_produccion ));
+	
+	stock_aux = stock_act + $3;
+	UPDATE producto SET nombre = $2, stock_ingreso = $3, id_unidad_medida = $4, tipo_producto = $5, stock_actual = stock_aux, precio_venta = $6, stock_minimo = $7, id_costo_produccion = id_cost_producc
+	WHERE id_producto = id_product;
+	
+END;
+$$
+LANGUAGE 'plpgsql';
+--Ejemplo de uso
+select updateProduct(14, 'prueba func desde backend2', 20, 2, 1, 25, 5);
