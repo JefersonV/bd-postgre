@@ -12,7 +12,7 @@ RETURN NEW;
 END
 $$
 LANGUAGE plpgsql;
-
+  
 -- Este es el triger que se dispara luego insertar una venta
 CREATE TRIGGER TR_UPDATE_STOCK_PRODUCTO AFTER INSERT ON venta
 FOR EACH ROW

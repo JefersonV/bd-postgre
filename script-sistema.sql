@@ -14,8 +14,8 @@ CREATE TABLE
         estado SMALLINT,
         nit INT
     );
-
---Tabla tipo comprobante
+     
+---Tabla tipo comprobante
 
 CREATE TABLE
     IF NOT EXISTS tipo_comprobante(
