@@ -103,7 +103,7 @@ CREATE TABLE
 
 CREATE TABLE
     tipo_empaque(
-        id_empaque SERIAL PRIMARY KEY,
+        id_empaque_empaque SERIAL PRIMARY KEY,
         nombre VARCHAR(45)
     );
 
@@ -158,16 +158,17 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS costo_produccion(
         id_costo_produccion SERIAL PRIMARY KEY,
+	    fecha DATE,
         cantidad INT,
         precio_venta DOUBLE PRECISION,
         costo_por_libra DOUBLE PRECISION,
         ganancia_neta DOUBLE PRECISION,
         id_empaque INT,
-        id_tipo_materia INT,
+        id_materia_prima INT,
         id_unidad_medida INT,
         id_servicio_cafe INT,
-        FOREIGN KEY (id_empaque) REFERENCES tipo_empaque(id_empaque),
-        FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia_prima(id_tipo_materia),
+        FOREIGN KEY (id_empaque) REFERENCES material_empaque(id_empaque),
+        FOREIGN KEY (id_materia_prima) REFERENCES materia_prima(id_materia_prima),
         FOREIGN KEY (id_unidad_medida) REFERENCES unidad_de_medida(id_unidad_medida),
         FOREIGN KEY (id_servicio_cafe) REFERENCES servicio_cafe(id_servicio_cafe)
     );
@@ -354,7 +355,7 @@ CREATE TABLE
     IF NOT EXISTS material_empaque(
         id_empaque SERIAL PRIMARY KEY,
         fecha DATE,
-        costo DOUBLE PRECISION,
+        costo_empaque DOUBLE PRECISION,
         id_tipo_empaque INT,
         FOREIGN KEY (id_tipo_empaque) REFERENCES tipo_empaque(id_empaque)
     );
