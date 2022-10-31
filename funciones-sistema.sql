@@ -205,9 +205,7 @@ CREATE OR REPLACE FUNCTION SP_TR_INSER_VENTA_INSERT_LOG_MOV_INVENTARIO
 	    );
 	RETURN NEW;
 	END 
-$ 
-
-$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 --Trigger que se dispara despues del insert en la tabla venta
 
@@ -240,9 +238,7 @@ CREATE OR REPLACE FUNCTION SP_TR_INSER_COMPRA_INSERT_LOG_MOV_INVENTARIO
 	    );
 	RETURN NEW;
 	END 
-$ 
-
-$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 --Trigger que se dispara despues del insert enn la tabla compras
 

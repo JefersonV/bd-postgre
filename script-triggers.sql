@@ -1,5 +1,5 @@
--- El siguiente trigger tiene la finalidad de actualizar el stock de producto
--- Cuando se inserte una nueva venta
+--  El siguiente trigger tiene la finalidad de actualizar el stock de producto
+--  Cuando se inserte una nueva venta
 
 -- Creamos una funcion que se va a dispara con el trigger
 CREATE FUNCTION SP_TR_INSERT_VENTA_UPDATE_STOCK_PRODUCT() RETURNS TRIGGER

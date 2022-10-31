@@ -127,11 +127,12 @@ DECLARE
 	fechaActual DATE = (SELECT CURRENT_DATE);
 	costo_empaque  DOUBLE PRECISION =( SELECT costo_empaque FROM material_empaque WHERE id_tipo_empaque = $5 );
 	costo_servicio DOUBLE PRECISION =(SELECT costo_servicio FROM servicio_cafe WHERE id_servicio_cafe = $7);
+	costo DOUBLE PRECISION =(SELECT costo FROM materia_prima WHERE id_materia_prima=$6);
     ganancia_neta  DOUBLE PRECISION = 0;
 	
 BEGIN
 	--subtotal=precio_venta * cantidad<-hace falta
-	ganancia_neta = precio_venta-(costo + costo_servicio);
+	ganancia_neta = precio_venta-(costo_empaque + costo_servicio + costo);
 	
 INSERT INTO costo_produccion(fecha,cantidad,precio_venta,costo_por_libra, ganancia_neta,id_empaque, id_materia_prima, id_unidad_medida, id_servicio_cafe)
 VALUES (fechaActual,cantidad,precio_venta,costo_por_libra,ganancia_neta,tipo_empaque,materia_prima,unidad_de_medida,servicio);
@@ -163,12 +164,12 @@ $$
 DECLARE
 	fechaActual DATE = (SELECT CURRENT_DATE);
 	costo_empaque  DOUBLE PRECISION =( SELECT costo_empaqu FROM material_empaque WHERE id_tipo_empaque = $6 );
-	
+	costo DOUBLE PRECISION =(SELECT costo FROM materia_prima WHERE id_materia_prima=$7);
 	costo_servicio DOUBLE PRECISION =(SELECT costo_servicio FROM servicio_cafe WHERE id_servicio_cafe = $8);
     Calculoganancia_neta  DOUBLE PRECISION = 0;
 BEGIN
 	--subtotal=precio_venta * cantidad<-hace falta
-	Calculoganancia_neta = precio_venta-(costo_empaque + costo_servicio);
+	Calculoganancia_neta = precio_venta-(costo_empaque + costo_servicio + costo);
 	
 UPDATE costo_produccion SET fecha =fechaActual ,cantidad =$2, precio_venta=$3, costo_por_libra=$4, ganancia_neta =Calculoganancia_neta,id_empaque =$6, id_materia_prima =$7, id_unidad_medida =$5, id_servicio_cafe=$8
 WHERE id_costo_produccion = id_C;
